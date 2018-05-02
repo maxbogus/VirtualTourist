@@ -77,6 +77,7 @@
 		4A3389E9209A3F930049DDA6 = {
 			isa = PBXGroup;
 			children = (
+				4A3389F5209A3F930049DDA6 /* AppDelegate.swift */,
 				4A3389F4209A3F930049DDA6 /* VirtualTourist */,
 				4A338A09209A3F960049DDA6 /* VirtualTouristTests */,
 				4A338A14209A3F960049DDA6 /* VirtualTouristUITests */,
@@ -97,11 +98,11 @@
 		4A3389F4209A3F930049DDA6 /* VirtualTourist */ = {
 			isa = PBXGroup;
 			children = (
-				4A3389F5209A3F930049DDA6 /* AppDelegate.swift */,
-				4A3389F7209A3F930049DDA6 /* ViewController.swift */,
-				4A3389F9209A3F930049DDA6 /* Main.storyboard */,
-				4A3389FC209A3F960049DDA6 /* Assets.xcassets */,
-				4A3389FE209A3F960049DDA6 /* LaunchScreen.storyboard */,
+				4A83ECE3209A809A009B7ADE /* View Controllers */,
+				4A83ECE2209A8080009B7ADE /* Storyboards */,
+				4A83ECE1209A805F009B7ADE /* Assets */,
+				4A83ECE0209A8054009B7ADE /* Views */,
+				4A83ECDF209A804A009B7ADE /* Model */,
 				4A338A01209A3F960049DDA6 /* Info.plist */,
 			);
 			path = VirtualTourist;
@@ -123,6 +124,45 @@
 				4A338A17209A3F960049DDA6 /* Info.plist */,
 			);
 			path = VirtualTouristUITests;
+			sourceTree = "<group>";
+		};
+		4A83ECDF209A804A009B7ADE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4A83ECE0209A8054009B7ADE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4A83ECE1209A805F009B7ADE /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				4A3389FC209A3F960049DDA6 /* Assets.xcassets */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		4A83ECE2209A8080009B7ADE /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				4A3389F9209A3F930049DDA6 /* Main.storyboard */,
+				4A3389FE209A3F960049DDA6 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		4A83ECE3209A809A009B7ADE /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				4A3389F7209A3F930049DDA6 /* ViewController.swift */,
+			);
+			path = "View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
