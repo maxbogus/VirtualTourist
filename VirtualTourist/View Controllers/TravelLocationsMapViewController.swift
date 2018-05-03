@@ -6,20 +6,17 @@
 //  Copyright © 2018 Max Boguslavskiy. All rights reserved.
 //
 
+import MapKit
 import UIKit
 
-class TravelLocationsMapViewController: UIViewController {
+class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
 
+    @IBOutlet weak var mapView: MKMapView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        mapView.showsUserLocation = true
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 
 }
 
