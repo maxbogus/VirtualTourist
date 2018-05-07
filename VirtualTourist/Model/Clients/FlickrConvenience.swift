@@ -14,7 +14,7 @@ import Foundation
 extension FlickrClient {
     
     // MARK: Search photos by coordinates (GET) Methods
-    func searchByLatLon(latitude: Double, longitude: Double, completionHandlerForSession: @escaping (_ success: Bool, _ sessionID: String?, _ userID: String?, _ errorString: String?) -> Void) {
+    func searchByLatLon(latitude: Double, longitude: Double, completionHandlerForSession: @escaping (_ success: Bool, _ photosArray: [[String: AnyObject]]?, _ errorString: String?) -> Void) {
         let methodParameters = [
             FlickrParameterKeys.Method: FlickrParameterValues.SearchMethod,
             FlickrParameterKeys.APIKey: FlickrParameterValues.APIKey,
@@ -28,18 +28,18 @@ extension FlickrClient {
             
             /* 3. Send the desired value(s) to completion handler */
             if error != nil {
-                completionHandlerForSession(false, nil, nil, "Login Failed.")
+                completionHandlerForSession(false, nil, "Search failed.")
             } else {
-                if let session = results?[FlickrResponseKeys.Status] as? NSDictionary, let account = results?[FlickrResponseKeys.Status] as? NSDictionary {
-                    if let sessionID = session[FlickrResponseKeys.Status] as? String, let userID = account[FlickrResponseKeys.Status] as? String {
-                        completionHandlerForSession(true, sessionID, userID, nil)
+                if let photosDictionary = results?[FlickrResponseKeys.Photos] as? NSDictionary {
+                    if let photosArray = photosDictionary[FlickrResponseKeys.Photo] as? [[String: AnyObject]] {
+                        completionHandlerForSession(true, photosArray, nil)
                     } else {
-                        print("Could not find \(FlickrResponseKeys.Status) in \(results!)")
-                        completionHandlerForSession(false, nil, nil, "Login Failed (SessionID).")
+                        print("Could not find \(FlickrResponseKeys.Photo) in \(results!)")
+                        completionHandlerForSession(false, nil, "Get photo array failed.")
                     }
                 } else {
-                    print("Could not find \(FlickrResponseKeys.Status) in \(results!)")
-                    completionHandlerForSession(false, nil, nil, "Login Failed (Session).")
+                    print("Could not find \(FlickrResponseKeys.Photos) in \(results!)")
+                    completionHandlerForSession(false, nil, "Get photos dictionary failed.")
                 }
             }
         }
