@@ -35,7 +35,8 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
     
     fileprivate func setUpFetchedResultsController() {
         let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
-        fetchRequest.sortDescriptors = nil
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "pins")
         
@@ -49,7 +50,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-//        setUpFetchedResultsController()
+        setUpFetchedResultsController()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -107,7 +108,8 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
     
     // perform action on click on annotation
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        let controller = storyboard!.instantiateViewController(withIdentifier: "PhotoAlbumViewController")
-        present(controller, animated: true, completion: nil)
+        let photoAlbumViewController = self.storyboard!.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
+        photoAlbumViewController.dataController = dataController
+        self.navigationController!.pushViewController(photoAlbumViewController, animated: true)
     }
 }
