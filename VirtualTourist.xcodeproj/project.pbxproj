@@ -19,6 +19,7 @@
 		4A83ECEB209FCA39009B7ADE /* FlickrClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A83ECEA209FCA39009B7ADE /* FlickrClient.swift */; };
 		4A83ECED209FCA48009B7ADE /* FlickrConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A83ECEC209FCA48009B7ADE /* FlickrConstants.swift */; };
 		4A83ECEF209FCA59009B7ADE /* FlickrConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A83ECEE209FCA59009B7ADE /* FlickrConvenience.swift */; };
+		4ABA67A820A3A94E00EE80AC /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ABA67A720A3A94E00EE80AC /* DataController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		4A83ECEA209FCA39009B7ADE /* FlickrClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrClient.swift; sourceTree = "<group>"; };
 		4A83ECEC209FCA48009B7ADE /* FlickrConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrConstants.swift; sourceTree = "<group>"; };
 		4A83ECEE209FCA59009B7ADE /* FlickrConvenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrConvenience.swift; sourceTree = "<group>"; };
+		4ABA67A720A3A94E00EE80AC /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 			children = (
 				4A83ECE9209FCA08009B7ADE /* Clients */,
 				4A83ECE4209A8115009B7ADE /* VirtualTourist.xcdatamodeld */,
+				4ABA67A720A3A94E00EE80AC /* DataController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				4A83ECEB209FCA39009B7ADE /* FlickrClient.swift in Sources */,
 				4A3389F6209A3F930049DDA6 /* AppDelegate.swift in Sources */,
 				4A83ECE6209A8115009B7ADE /* VirtualTourist.xcdatamodeld in Sources */,
+				4ABA67A820A3A94E00EE80AC /* DataController.swift in Sources */,
 				4A83ECED209FCA48009B7ADE /* FlickrConstants.swift in Sources */,
 				4A83ECE8209BC500009B7ADE /* PhotoAlbumViewController.swift in Sources */,
 			);

@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import MapKit
+import CoreData
 
 class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
     
@@ -16,6 +17,8 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var newCollectionButton: UIToolbar!
     var regionHasBeenCentered = false
+    var dataController: DataController!
+    var fetchedResultsController:NSFetchedResultsController<Photo>!
     
     @IBAction func returnBack(_ sender: Any) {
         dismiss(animated: true, completion: nil)

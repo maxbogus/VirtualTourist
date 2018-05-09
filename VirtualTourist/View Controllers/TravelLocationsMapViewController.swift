@@ -8,12 +8,15 @@
 
 import MapKit
 import UIKit
+import CoreData
 
 class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
     var myAnnotations = [CLLocation]()
     var regionHasBeenCentered = false
+    var dataController: DataController!
+    var fetchedResultsController:NSFetchedResultsController<Pin>!
     let locationManager = CLLocationManager()
     
     private let reuseIdentifier = "MyIdentifier"
@@ -28,6 +31,30 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
+    }
+    
+    fileprivate func setUpFetchedResultsController() {
+        let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
+        fetchRequest.sortDescriptors = nil
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "pins")
+        
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("The fetch couldn't be performed \(error.localizedDescription)")
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+//        setUpFetchedResultsController()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        fetchedResultsController = nil
     }
     
     override func viewDidLoad() {
