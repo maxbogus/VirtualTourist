@@ -18,17 +18,25 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
     
     private let reuseIdentifier = "MyIdentifier"
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        mapView.delegate = self
+    fileprivate func setUpGestureRecognition() {
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(addWaypoint(longGesture:)))
         mapView.addGestureRecognizer(longGesture)
-        mapView.showsUserLocation = true
-        
+    }
+    
+    fileprivate func setUpAutomaticCenterOnUserLocation() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        mapView.delegate = self
+        setUpGestureRecognition()
+        mapView.showsUserLocation = true
+        
+        setUpAutomaticCenterOnUserLocation()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
