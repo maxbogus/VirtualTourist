@@ -9,10 +9,13 @@
 import MapKit
 import UIKit
 
-class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
+class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
     var myAnnotations = [CLLocation]()
+    var regionHasBeenCentered = false
+    let locationManager = CLLocationManager()
+    
     private let reuseIdentifier = "MyIdentifier"
     
     override func viewDidLoad() {
@@ -21,6 +24,26 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate {
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(addWaypoint(longGesture:)))
         mapView.addGestureRecognizer(longGesture)
         mapView.showsUserLocation = true
+        
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations[0]
+        
+        if !regionHasBeenCentered {
+            let span: MKCoordinateSpan = MKCoordinateSpanMake(40.0, 40.0)
+            let userLocation: CLLocationCoordinate2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
+            let region: MKCoordinateRegion = MKCoordinateRegionMake(userLocation, span)
+            
+            mapView.setRegion(region, animated: true)
+            regionHasBeenCentered = true
+        }
+        
+        self.mapView.showsUserLocation = true
     }
     
     @objc func addWaypoint(longGesture: UIGestureRecognizer) {
