@@ -21,6 +21,10 @@ class PhotoAlbumViewController: UIViewController {
         collectionView.isHidden = true
     }
     
+    @IBAction func returnBack(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
     @IBAction func newCollectionButton(_ sender: Any) {
         print("new collection")
     }

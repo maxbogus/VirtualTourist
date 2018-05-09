@@ -163,8 +163,8 @@
 		4A83ECE2209A8080009B7ADE /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				4A3389F9209A3F930049DDA6 /* Main.storyboard */,
 				4A3389FE209A3F960049DDA6 /* LaunchScreen.storyboard */,
+				4A3389F9209A3F930049DDA6 /* Main.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
