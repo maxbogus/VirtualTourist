@@ -62,9 +62,13 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         super.viewDidLoad()
         mapView.delegate = self
         setUpGestureRecognition()
-        mapView.showsUserLocation = false
+//        mapView.showsUserLocation = false
         
         setUpAutomaticCenterOnUserLocation()
+//        if let sections = fetchedResultsController.sections {
+//            print("debug")
+//            print(sections)
+//        }
         if let pins = loadAnnotations() {
             showPins(pins: pins)
         }
@@ -100,7 +104,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
             regionHasBeenCentered = true
         }
         
-        self.mapView.showsUserLocation = true
+//        self.mapView.showsUserLocation = true
     }
     
     @objc func addWaypoint(longGesture: UIGestureRecognizer) {
@@ -141,6 +145,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let photoAlbumViewController = self.storyboard!.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
         photoAlbumViewController.dataController = dataController
+        photoAlbumViewController.annotation = view.annotation as! MKPointAnnotation
         self.navigationController!.pushViewController(photoAlbumViewController, animated: true)
     }
 }

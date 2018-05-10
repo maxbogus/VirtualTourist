@@ -18,6 +18,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     @IBOutlet weak var newCollectionButton: UIToolbar!
     var regionHasBeenCentered = false
     var dataController: DataController!
+    var annotation: MKPointAnnotation!
     var fetchedResultsController:NSFetchedResultsController<Photo>!
     
     @IBAction func returnBack(_ sender: Any) {
@@ -29,7 +30,6 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     }
     
     let locationManager = CLLocationManager()
-//    var myAnnotation = CLLocation()!
     
     fileprivate func setUpAutomaticCenterOnUserLocation() {
         locationManager.delegate = self
@@ -56,6 +56,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         super.viewDidLoad()
         mapView.delegate = self
         collectionView.isHidden = true
+        mapView.addAnnotation(annotation)
         setUpAutomaticCenterOnUserLocation()
     }
     
@@ -82,6 +83,6 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
             regionHasBeenCentered = true
         }
         
-        self.mapView.showsUserLocation = true
+//        self.mapView.showsUserLocation = true
     }
 }
