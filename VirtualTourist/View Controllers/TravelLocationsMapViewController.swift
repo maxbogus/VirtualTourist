@@ -62,9 +62,30 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         super.viewDidLoad()
         mapView.delegate = self
         setUpGestureRecognition()
-        mapView.showsUserLocation = true
+        mapView.showsUserLocation = false
         
         setUpAutomaticCenterOnUserLocation()
+        if let pins = loadAnnotations() {
+            showPins(pins: pins)
+        }
+    }
+    
+    func loadAnnotations() -> [Pin]? {
+        if let controller = fetchedResultsController {
+            if let objects = controller.fetchedObjects {
+                return objects as [Pin]
+            }
+        }
+        return nil
+    }
+    
+    func showPins(pins: [Pin]) {
+        for pin in pins {
+            let annotation = MKPointAnnotation()
+            let coordinate:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.latitude)
+            annotation.coordinate = coordinate
+            mapView.addAnnotation(annotation)
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -88,6 +109,16 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         let annotation = MKPointAnnotation()
         annotation.coordinate = newCoordinates
         mapView.addAnnotation(annotation)
+        addAnnotation(coordinate: newCoordinates)
+    }
+    
+    /// Adds a new notebook to the end of the `notebooks` array
+    func addAnnotation(coordinate: CLLocationCoordinate2D) {
+        let pin = Pin(context: dataController.viewContext)
+        pin.longitude = coordinate.longitude
+        pin.latitude = coordinate.latitude
+        pin.creationDate = Date()
+        try? dataController.viewContext.save()
     }
 
     // setup annotation view
