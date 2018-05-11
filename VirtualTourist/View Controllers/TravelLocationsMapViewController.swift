@@ -50,7 +50,9 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        setUpFetchedResultsController()
+        if let pins = loadAnnotations() {
+            showPins(pins: pins)
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -62,16 +64,8 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         super.viewDidLoad()
         mapView.delegate = self
         setUpGestureRecognition()
-//        mapView.showsUserLocation = false
-        
+        setUpFetchedResultsController()
         setUpAutomaticCenterOnUserLocation()
-//        if let sections = fetchedResultsController.sections {
-//            print("debug")
-//            print(sections)
-//        }
-        if let pins = loadAnnotations() {
-            showPins(pins: pins)
-        }
     }
     
     func loadAnnotations() -> [Pin]? {

@@ -82,7 +82,6 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
             mapView.setRegion(region, animated: true)
             regionHasBeenCentered = true
         }
-        
-//        self.mapView.showsUserLocation = true
+
     }
 }
