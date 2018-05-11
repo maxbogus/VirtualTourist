@@ -26,7 +26,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     }
     
     @IBAction func newCollectionButton(_ sender: Any) {
-        print("new collection")
+        fetchPhotos()
     }
     
     let locationManager = CLLocationManager()
@@ -63,6 +63,9 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        fetchPhotos()
+        
+        
         // fetch photos
         // if photos array is empty - show hide collection view
         // else - show collection
@@ -71,6 +74,26 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         fetchedResultsController = nil
+    }
+    
+    func fetchPhotos() {
+        FlickrClient.sharedInstance().searchByLatLon(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude) { (success, photoArray, errorString) in
+            performUIUpdatesOnMain {
+                if success {
+                    print(photoArray as Any)
+                    self.collectionView.isHidden = false
+                } else {
+                    self.collectionView.isHidden = true
+                    let alert = UIAlertController(title: "Error", message: "\(String(describing: errorString))", preferredStyle: UIAlertControllerStyle.alert)
+                    
+                    // add an action (button)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    
+                    // show the alert
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

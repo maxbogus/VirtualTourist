@@ -83,11 +83,7 @@ class FlickrClient : NSObject {
         
         var parsedResult: AnyObject! = nil
         do {
-            if let data = String(bytes: data, encoding: String.Encoding.utf8) {
-                let correctedData = String(data.dropFirst(5))
-                let data = correctedData.data(using: .utf8)!
-                parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
-            }
+            parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
         } catch {
             let userInfo = [NSLocalizedDescriptionKey : "Could not parse the data as JSON: '\(data)'"]
             completionHandlerForConvertData(nil, NSError(domain: "convertDataWithCompletionHandler", code: 1, userInfo: userInfo))
