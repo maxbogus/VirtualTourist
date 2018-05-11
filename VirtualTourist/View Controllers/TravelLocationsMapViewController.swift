@@ -80,7 +80,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
     func showPins(pins: [Pin]) {
         for pin in pins {
             let annotation = MKPointAnnotation()
-            let coordinate:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.latitude)
+            let coordinate:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
             annotation.coordinate = coordinate
             mapView.addAnnotation(annotation)
         }
@@ -97,8 +97,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
             mapView.setRegion(region, animated: true)
             regionHasBeenCentered = true
         }
-        
-//        self.mapView.showsUserLocation = true
+
     }
     
     @objc func addWaypoint(longGesture: UIGestureRecognizer) {

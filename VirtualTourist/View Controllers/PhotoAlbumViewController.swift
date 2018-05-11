@@ -55,15 +55,17 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
-        collectionView.isHidden = true
         mapView.addAnnotation(annotation)
         setUpAutomaticCenterOnUserLocation()
+        setUpFetchedResultsController()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        setUpFetchedResultsController()
+        // fetch photos
+        // if photos array is empty - show hide collection view
+        // else - show collection
     }
     
     override func viewDidDisappear(_ animated: Bool) {
