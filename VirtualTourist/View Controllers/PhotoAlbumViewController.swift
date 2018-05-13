@@ -83,7 +83,6 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
                     if let photoArray = photoArray {
                         self.fillPhotoCollection(photoArray)
                     }
-                    self.collectionView.isHidden = false
                 } else {
                     self.collectionView.isHidden = true
                     let alert = UIAlertController(title: "Error", message: "\(String(describing: errorString))", preferredStyle: UIAlertControllerStyle.alert)
@@ -112,18 +111,21 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         print(photoArray as Any)
         if photoArray.count == 0 {
             displayError("No Photos Found. Search Again.")
+            self.collectionView.isHidden = true
             return
         } else {
             // select first 20 photos
             for photo in photoArray {
-                downloadPhoto(photo)
-                addPhotoToPhotoCollection()
-                savePhotoAsPhotoObject()
+                if let photoObject: [String: AnyObject] = downloadPhoto(photo) {
+                    savePhotoAsPhotoObject(photoObject)
+                    addPhotoToPhotoCollection(photoObject)
+                }
             }
+            self.collectionView.isHidden = false
         }
     }
     
-    func downloadPhoto(_ photo: [String: AnyObject]) {
+    func downloadPhoto(_ photo: [String: AnyObject]) -> [String: AnyObject]? {
         print("download photo")
         let photoDictionary = photo as [String: AnyObject]
         let photoTitle = photoDictionary[FlickrClient.FlickrResponseKeys.Title] as? String
@@ -132,28 +134,31 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         /* GUARD: Does our photo have a key for 'url_m'? */
         guard let imageUrlString = photoDictionary[FlickrClient.FlickrResponseKeys.MediumURL] as? String else {
             displayError("Cannot find key '\(FlickrClient.FlickrResponseKeys.MediumURL)' in \(photoDictionary)")
-            return
+            return nil
         }
         
         // if an image exists at the url, set the image and title
         let imageURL = URL(string: imageUrlString)
         if let imageData = try? Data(contentsOf: imageURL!) {
-            print(imageData)
-//            performUIUpdatesOnMain {
-//                self.setUIEnabled(true)
-//                self.photoImageView.image = UIImage(data: imageData)
-//                self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
-//            }
+            return ["imageUrl": imageUrlString as AnyObject,
+                    "imageData": imageData as AnyObject,
+                    "photoTitle": photoTitle as AnyObject]
         } else {
             displayError("Image does not exist at \(String(describing: imageURL))")
+            return nil
         }
     }
     
-    func addPhotoToPhotoCollection() {
+    func addPhotoToPhotoCollection(_ photoObject: [String: AnyObject]) {
         print("addPhoto to Collection")
+        print(photoObject)
+//        performUIUpdatesOnMain {
+//            self.photoImageView.image = UIImage(data: imageData)
+//            self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
+//        }
     }
     
-    func savePhotoAsPhotoObject() {
+    func savePhotoAsPhotoObject(_ photoObject: [String: AnyObject]) {
         print("save photo as photo object")
     }
     
