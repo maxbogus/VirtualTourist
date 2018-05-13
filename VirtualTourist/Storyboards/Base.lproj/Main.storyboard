@@ -59,7 +59,7 @@
         <!--Photo Album View Controller-->
         <scene sceneID="sMh-cA-6BP">
             <objects>
-                <viewController storyboardIdentifier="PhotoAlbumViewController" id="fN5-Oy-8R7" customClass="PhotoAlbumViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoAlbumViewControllerID" id="fN5-Oy-8R7" customClass="PhotoAlbumViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SEC-kg-uoU">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -86,13 +86,27 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="imageCell" id="dOp-Qx-B6i">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="imageCell" id="dOp-Qx-B6i" customClass="PhotoAlbumCollectionCellController" customModule="VirtualTourist" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cHA-Th-tvV">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                </imageView>
+                                            </subviews>
                                         </view>
+                                        <constraints>
+                                            <constraint firstItem="cHA-Th-tvV" firstAttribute="leading" secondItem="dOp-Qx-B6i" secondAttribute="leading" id="7OC-0H-egn"/>
+                                            <constraint firstAttribute="bottom" secondItem="cHA-Th-tvV" secondAttribute="bottom" id="Ado-dY-myr"/>
+                                            <constraint firstItem="cHA-Th-tvV" firstAttribute="top" secondItem="dOp-Qx-B6i" secondAttribute="top" id="Tu8-hT-i6f"/>
+                                            <constraint firstAttribute="trailing" secondItem="cHA-Th-tvV" secondAttribute="trailing" id="lrf-fK-aGu"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="photoAlbumImage" destination="cHA-Th-tvV" id="BTX-PT-ahd"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -142,14 +156,14 @@
                         <viewLayoutGuide key="safeArea" id="53C-RP-whP"/>
                     </view>
                     <connections>
-                        <outlet property="collectionView" destination="obf-Qs-g20" id="Zqm-9j-fKf"/>
                         <outlet property="mapView" destination="vU8-0x-Cbt" id="LH3-an-auO"/>
                         <outlet property="newCollectionButton" destination="sDU-ag-Pim" id="606-U7-8nN"/>
+                        <outlet property="uiCollectionView" destination="obf-Qs-g20" id="52L-aC-yw5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kKj-b3-OdG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="662" y="2"/>
+            <point key="canvasLocation" x="661.60000000000002" y="1.3493253373313345"/>
         </scene>
     </scenes>
 </document>

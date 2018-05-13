@@ -14,7 +14,7 @@ import CoreData
 class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet var uiCollectionView: UICollectionView!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
 
     @IBAction func returnBack(_ sender: Any) {
@@ -84,7 +84,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
                         self.fillPhotoCollection(photoArray)
                     }
                 } else {
-                    self.collectionView.isHidden = true
+                    self.uiCollectionView?.isHidden = true
                     let alert = UIAlertController(title: "Error", message: "\(String(describing: errorString))", preferredStyle: UIAlertControllerStyle.alert)
                     
                     // add an action (button)
@@ -112,7 +112,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         print(photoArray as Any)
         if photoArray.count == 0 {
             displayError("No Photos Found. Search Again.")
-            self.collectionView.isHidden = true
+            self.uiCollectionView.isHidden = true
             return
         } else {
             // select first 20 photos
@@ -122,7 +122,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
                     addPhotoToPhotoCollection(photoObject)
                 }
             }
-            self.collectionView.isHidden = false
+            self.uiCollectionView.isHidden = false
         }
     }
     
@@ -174,6 +174,28 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
             mapView.setRegion(region, animated: true)
             regionHasBeenCentered = true
         }
-
+    }
+    
+    private func numberOfSections(in tableView: UITableView) -> Int {
+        return fetchedResultsController.sections?.count ?? 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return fetchedResultsController.sections?[section].numberOfObjects ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let photo = fetchedResultsController.object(at: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as! PhotoAlbumCollectionCellController
+        
+        // Set the image
+        cell.photoAlbumImage?.image = UIImage(data: photo.image!)
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath)
+        
     }
 }

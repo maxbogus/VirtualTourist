@@ -136,7 +136,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
     
     // perform action on click on annotation
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        let photoAlbumViewController = self.storyboard!.instantiateViewController(withIdentifier: "PhotoAlbumViewController") as! PhotoAlbumViewController
+        let photoAlbumViewController = self.storyboard!.instantiateViewController(withIdentifier: "PhotoAlbumViewControllerID") as! PhotoAlbumViewController
         photoAlbumViewController.dataController = dataController
         photoAlbumViewController.annotation = view.annotation as! MKPointAnnotation
         self.navigationController!.pushViewController(photoAlbumViewController, animated: true)
