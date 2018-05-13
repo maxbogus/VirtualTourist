@@ -15,12 +15,8 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var newCollectionButton: UIToolbar!
-    var regionHasBeenCentered = false
-    var dataController: DataController!
-    var annotation: MKPointAnnotation!
-    var fetchedResultsController:NSFetchedResultsController<Photo>!
-    
+    @IBOutlet weak var newCollectionButton: UIBarButtonItem!
+
     @IBAction func returnBack(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -29,6 +25,10 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         fetchPhotos()
     }
     
+    var regionHasBeenCentered = false
+    var dataController: DataController!
+    var annotation: MKPointAnnotation!
+    var fetchedResultsController:NSFetchedResultsController<Photo>!
     let locationManager = CLLocationManager()
     
     fileprivate func setUpAutomaticCenterOnUserLocation() {
@@ -62,7 +62,6 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         fetchPhotos()
         
         
@@ -77,6 +76,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     }
     
     func fetchPhotos() {
+        newCollectionButton.isEnabled = false
         FlickrClient.sharedInstance().searchByLatLon(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude) { (success, photoArray, errorString) in
             performUIUpdatesOnMain {
                 if success {
@@ -93,6 +93,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
                     // show the alert
                     self.present(alert, animated: true, completion: nil)
                 }
+                self.newCollectionButton.isEnabled = true
             }
         }
     }
