@@ -22,7 +22,8 @@ extension FlickrClient {
             FlickrParameterKeys.SafeSearch: FlickrParameterValues.UseSafeSearch,
             FlickrParameterKeys.Extras: FlickrParameterValues.MediumURL,
             FlickrParameterKeys.Format: FlickrParameterValues.ResponseFormat,
-            FlickrParameterKeys.NoJSONCallback: FlickrParameterValues.DisableJSONCallback
+            FlickrParameterKeys.NoJSONCallback: FlickrParameterValues.DisableJSONCallback,
+            FlickrParameterKeys.PerPage: FlickrParameterValues.PerPageValue
         ]
         let _ = taskForGETMethod(parameters: methodParameters as [String : AnyObject]) { (results, error) in
             

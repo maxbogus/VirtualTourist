@@ -80,7 +80,9 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         FlickrClient.sharedInstance().searchByLatLon(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude) { (success, photoArray, errorString) in
             performUIUpdatesOnMain {
                 if success {
-                    print(photoArray as Any)
+                    if let photoArray = photoArray {
+                        self.fillPhotoCollection(photoArray)
+                    }
                     self.collectionView.isHidden = false
                 } else {
                     self.collectionView.isHidden = true
@@ -94,6 +96,65 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
                 }
             }
         }
+    }
+    
+    func displayError(_ error: String) {
+        let alert = UIAlertController(title: "Error", message: "\(error)", preferredStyle: UIAlertControllerStyle.alert)
+        
+        // add an action (button)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        
+        // show the alert
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func fillPhotoCollection(_ photoArray: [[String: AnyObject]]) {
+        print(photoArray as Any)
+        if photoArray.count == 0 {
+            displayError("No Photos Found. Search Again.")
+            return
+        } else {
+            // select first 20 photos
+            for photo in photoArray {
+                downloadPhoto(photo)
+                addPhotoToPhotoCollection()
+                savePhotoAsPhotoObject()
+            }
+        }
+    }
+    
+    func downloadPhoto(_ photo: [String: AnyObject]) {
+        print("download photo")
+        let photoDictionary = photo as [String: AnyObject]
+        let photoTitle = photoDictionary[FlickrClient.FlickrResponseKeys.Title] as? String
+        print(photoTitle as Any)
+        
+        /* GUARD: Does our photo have a key for 'url_m'? */
+        guard let imageUrlString = photoDictionary[FlickrClient.FlickrResponseKeys.MediumURL] as? String else {
+            displayError("Cannot find key '\(FlickrClient.FlickrResponseKeys.MediumURL)' in \(photoDictionary)")
+            return
+        }
+        
+        // if an image exists at the url, set the image and title
+        let imageURL = URL(string: imageUrlString)
+        if let imageData = try? Data(contentsOf: imageURL!) {
+            print(imageData)
+//            performUIUpdatesOnMain {
+//                self.setUIEnabled(true)
+//                self.photoImageView.image = UIImage(data: imageData)
+//                self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
+//            }
+        } else {
+            displayError("Image does not exist at \(String(describing: imageURL))")
+        }
+    }
+    
+    func addPhotoToPhotoCollection() {
+        print("addPhoto to Collection")
+    }
+    
+    func savePhotoAsPhotoObject() {
+        print("save photo as photo object")
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
