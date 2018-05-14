@@ -126,10 +126,8 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     }
     
     func downloadPhoto(_ photo: [String: AnyObject]) -> [String: AnyObject]? {
-        print("download photo")
         let photoDictionary = photo as [String: AnyObject]
         let photoTitle = photoDictionary[FlickrClient.FlickrResponseKeys.Title] as? String
-        print(photoTitle as Any)
         
         /* GUARD: Does our photo have a key for 'url_m'? */
         guard let imageUrlString = photoDictionary[FlickrClient.FlickrResponseKeys.MediumURL] as? String else {

@@ -31,7 +31,6 @@ extension FlickrClient {
             if error != nil {
                 completionHandlerForSession(false, nil, "Search failed.")
             } else {
-                print(results as Any)
                 if let photosDictionary = results?[FlickrResponseKeys.Photos] as? NSDictionary {
                     if let photosArray = photosDictionary[FlickrResponseKeys.Photo] as? [[String: AnyObject]] {
                         completionHandlerForSession(true, photosArray, nil)
