@@ -63,11 +63,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchPhotos()
-        
-        
-        // fetch photos
-        // if photos array is empty - show hide collection view
-        // else - show collection
+        uiCollectionView?.reloadData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -77,23 +73,18 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     
     func fetchPhotos() {
         newCollectionButton.isEnabled = false
-        FlickrClient.sharedInstance().searchByLatLon(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude) { (success, photoArray, errorString) in
-            performUIUpdatesOnMain {
+        let downloadQueue = DispatchQueue.global()
+        
+        // call dispatch async to send a closure to the downloads queue
+        downloadQueue.async { () -> Void in
+            FlickrClient.sharedInstance().searchByLatLon(latitude: self.annotation.coordinate.latitude, longitude: self.annotation.coordinate.longitude) { (success, photoArray, errorString) in
                 if success {
                     if let photoArray = photoArray {
                         self.fillPhotoCollection(photoArray)
                     }
                 } else {
-                    self.uiCollectionView?.isHidden = true
-                    let alert = UIAlertController(title: "Error", message: "\(String(describing: errorString))", preferredStyle: UIAlertControllerStyle.alert)
-                    
-                    // add an action (button)
-                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                    
-                    // show the alert
-                    self.present(alert, animated: true, completion: nil)
+                    self.updateCollectionView(showCollectionView: true, enableButton: true, errorString: errorString)
                 }
-                self.newCollectionButton.isEnabled = true
             }
         }
     }
@@ -109,10 +100,8 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     }
     
     func fillPhotoCollection(_ photoArray: [[String: AnyObject]]) {
-        print(photoArray as Any)
         if photoArray.count == 0 {
-            displayError("No Photos Found. Search Again.")
-            self.uiCollectionView.isHidden = true
+            self.updateCollectionView(showCollectionView: false, enableButton: true, errorString: "No Photos Found. Search Again.")
             return
         } else {
             // select first 20 photos
@@ -122,7 +111,17 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
                     addPhotoToPhotoCollection(photoObject)
                 }
             }
-            self.uiCollectionView.isHidden = false
+            self.updateCollectionView(showCollectionView: true, enableButton: true)
+        }
+    }
+    
+    func updateCollectionView(showCollectionView: Bool, enableButton: Bool, errorString: String? = nil) {
+        performUIUpdatesOnMain {
+            if let error = errorString {
+                self.displayError(error)
+            }
+            self.uiCollectionView.isHidden = showCollectionView
+            self.newCollectionButton.isEnabled = enableButton
         }
     }
     
