@@ -134,11 +134,40 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         return annotationView
     }
     
+    private func findPin(coordinate: CLLocationCoordinate2D) -> Pin? {
+        let predicate = NSPredicate(format: "latitude == %lf AND longitude == %lf", coordinate.latitude, coordinate.longitude)
+        var pin: Pin?
+        do {
+            try pin = fetchPin(predicate)
+        } catch {
+            print("\(#function) error:\(error)")
+        }
+        return pin
+    }
+    
+    private func fetchPin(_ predicate: NSPredicate, sorting: NSSortDescriptor? = nil) throws -> Pin? {
+        let fr: NSFetchRequest<Pin> = Pin.fetchRequest()
+        fr.predicate = predicate
+        if let sorting = sorting {
+            fr.sortDescriptors = [sorting]
+        }
+        guard let pin = try? dataController.viewContext.fetch(fr).first else {
+            print("nil")
+            return nil
+        }
+        return pin
+    }
+    
     // perform action on click on annotation
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let photoAlbumViewController = self.storyboard!.instantiateViewController(withIdentifier: "PhotoAlbumViewControllerID") as! PhotoAlbumViewController
         photoAlbumViewController.dataController = dataController
-        photoAlbumViewController.annotation = view.annotation as! MKPointAnnotation
-        self.navigationController!.pushViewController(photoAlbumViewController, animated: true)
+        // fetch Pin
+        if let coordinate = view.annotation?.coordinate {
+            let pin = findPin(coordinate: coordinate)
+            print(pin)
+            photoAlbumViewController.pin = pin
+            self.navigationController!.pushViewController(photoAlbumViewController, animated: true)
+        }
     }
 }

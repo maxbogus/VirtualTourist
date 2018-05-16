@@ -28,6 +28,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     var regionHasBeenCentered = false
     var dataController: DataController!
     var annotation: MKPointAnnotation!
+    var pin: Pin!
     var fetchedResultsController:NSFetchedResultsController<Photo>!
     let locationManager = CLLocationManager()
     
@@ -52,10 +53,21 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         }
     }
     
+    private func setUpMapView() {
+        mapView.delegate = self
+        let annotation = MKPointAnnotation()
+        if let checkedPin = pin {
+            let coordinate:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: checkedPin.latitude, longitude: checkedPin.longitude)
+            annotation.coordinate = coordinate
+            mapView.addAnnotation(annotation)
+        } else {
+            print(pin)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        mapView.delegate = self
-        mapView.addAnnotation(annotation)
+        setUpMapView()
         setUpAutomaticCenterOnUserLocation()
         setUpFetchedResultsController()
     }
@@ -77,7 +89,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         
         // call dispatch async to send a closure to the downloads queue
         downloadQueue.async { () -> Void in
-            FlickrClient.sharedInstance().searchByLatLon(latitude: self.annotation.coordinate.latitude, longitude: self.annotation.coordinate.longitude) { (success, photoArray, errorString) in
+            FlickrClient.sharedInstance().searchByLatLon(latitude: self.pin.latitude, longitude: self.pin.longitude) { (success, photoArray, errorString) in
                 if success {
                     if let photoArray = photoArray {
                         self.fillPhotoCollection(photoArray)
@@ -158,6 +170,11 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     
     func savePhotoAsPhotoObject(_ photoObject: [String: AnyObject]) {
         print("save photo as photo object")
+        let photo = Photo(context: dataController.viewContext)
+        photo.image = photoObject["imageData"] as? Data
+        photo.creationDate = Date()
+        photo.newRelationship = pin
+        try? dataController.viewContext.save()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
