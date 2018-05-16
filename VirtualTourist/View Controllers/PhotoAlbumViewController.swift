@@ -11,10 +11,10 @@ import UIKit
 import MapKit
 import CoreData
 
-class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet var uiCollectionView: UICollectionView!
+    @IBOutlet var photoCollectionView: UICollectionView!
     @IBOutlet var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
 
@@ -98,7 +98,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchPhotos()
-        uiCollectionView?.reloadData()
+        photoCollectionView?.reloadData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -155,9 +155,9 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
             if let error = errorString {
                 self.displayError(error)
             }
-            self.uiCollectionView.isHidden = showCollectionView
+            self.photoCollectionView.isHidden = showCollectionView
             self.newCollectionButton.isEnabled = enableButton
-            self.uiCollectionView.reloadData()
+            self.photoCollectionView.reloadData()
         }
     }
     
