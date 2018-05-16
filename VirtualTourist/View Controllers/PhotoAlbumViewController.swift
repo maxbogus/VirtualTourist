@@ -28,7 +28,10 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     
     var regionHasBeenCentered = false
     var dataController: DataController!
-    var annotation: MKPointAnnotation!
+//    var annotation: MKPointAnnotation!
+    var insertedIndexPaths: [IndexPath]!
+    var deletedIndexPaths: [IndexPath]!
+    var updatedIndexPaths: [IndexPath]!
     var pin: Pin!
     var fetchedResultsController:NSFetchedResultsController<Photo>!
     let locationManager = CLLocationManager()
@@ -89,6 +92,8 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         setUpMapView()
         setUpAutomaticCenterOnUserLocation()
         setUpFetchedResultsController()
+        photoCollectionView.delegate = self
+        photoCollectionView.dataSource = self
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -195,7 +200,6 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         photo.image = photoObject["imageData"] as? Data
         photo.creationDate = Date()
         photo.pin = pin
-        print(photo)
         try? dataController.viewContext.save()
     }
     
@@ -212,7 +216,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         }
     }
     
-    private func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return fetchedResultsController.sections?.count ?? 1
     }
     
@@ -232,8 +236,61 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath)
-        
+        let photoToDelete = fetchedResultsController.object(at: indexPath)
+        dataController.viewContext.delete(photoToDelete)
+        try? dataController.viewContext.save()
     }
 
+}
+
+extension PhotoAlbumViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        insertedIndexPaths = [IndexPath]()
+        deletedIndexPaths = [IndexPath]()
+        updatedIndexPaths = [IndexPath]()
+    }
+    
+    func controller(
+        _ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        didChange anObject: Any,
+        at indexPath: IndexPath?,
+        for type: NSFetchedResultsChangeType,
+        newIndexPath: IndexPath?) {
+        
+        switch (type) {
+        case .insert:
+            insertedIndexPaths.append(newIndexPath!)
+            break
+        case .delete:
+            deletedIndexPaths.append(indexPath!)
+            break
+        case .update:
+            updatedIndexPaths.append(indexPath!)
+            break
+        case .move:
+            print("Move an item. We don't expect to see this in this app.")
+            break
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        
+        photoCollectionView.performBatchUpdates({() -> Void in
+            
+            for indexPath in self.insertedIndexPaths {
+                self.photoCollectionView.insertItems(at: [indexPath])
+            }
+            
+            for indexPath in self.deletedIndexPaths {
+                self.photoCollectionView.deleteItems(at: [indexPath])
+            }
+            
+            for indexPath in self.updatedIndexPaths {
+                self.photoCollectionView.reloadItems(at: [indexPath])
+            }
+
+        }, completion: nil)
+    }
+    
 }
