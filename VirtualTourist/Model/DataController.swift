@@ -11,7 +11,7 @@ import CoreData
 
 class DataController {
     let persistantContainer: NSPersistentContainer
-    
+
     var viewContext: NSManagedObjectContext {
         return persistantContainer.viewContext
     }
@@ -42,9 +42,11 @@ class DataController {
             completion?()
         }
     }
+
 }
 
 extension DataController {
+
     func autoSaveViewContext (interval:TimeInterval = 15) {
         print("autosaving...")
         guard interval > 0 else {
