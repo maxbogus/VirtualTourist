@@ -9,7 +9,7 @@
 // MARK: - FlickrConstants (Constants)
 
 extension FlickrClient {
-    
+
     // MARK: Flickr
     struct Constants {
         static let APIScheme = "https"
