@@ -15,6 +15,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet var uiCollectionView: UICollectionView!
+    @IBOutlet var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
 
     @IBAction func returnBack(_ sender: Any) {
@@ -42,7 +43,9 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     fileprivate func setUpFetchedResultsController() {
         let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        let predicate = NSPredicate(format: "pin == %@", pin)
         fetchRequest.sortDescriptors = [sortDescriptor]
+        fetchRequest.predicate = predicate
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "photos")
         
@@ -65,11 +68,31 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         }
     }
     
+    private func updateFlowLayout(_ withSize: CGSize) {
+        
+        let landscape = withSize.width > withSize.height
+        
+        let space: CGFloat = landscape ? 5 : 3
+        let items: CGFloat = landscape ? 2 : 3
+        
+        let dimension = (withSize.width - ((items + 1) * space)) / items
+        
+        flowLayout?.minimumInteritemSpacing = space
+        flowLayout?.minimumLineSpacing = space
+        flowLayout?.itemSize = CGSize(width: dimension, height: dimension)
+        flowLayout?.sectionInset = UIEdgeInsets(top: space, left: space, bottom: space, right: space)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateFlowLayout(view.frame.size)
         setUpMapView()
         setUpAutomaticCenterOnUserLocation()
         setUpFetchedResultsController()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        updateFlowLayout(size)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,7 +136,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     
     func fillPhotoCollection(_ photoArray: [[String: AnyObject]]) {
         if photoArray.count == 0 {
-            self.updateCollectionView(showCollectionView: false, enableButton: true, errorString: "No Photos Found. Search Again.")
+            self.updateCollectionView(showCollectionView: true, enableButton: true, errorString: "No Photos Found. Search Again.")
             return
         } else {
             // select first 20 photos
@@ -123,7 +146,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
                     addPhotoToPhotoCollection(photoObject)
                 }
             }
-            self.updateCollectionView(showCollectionView: true, enableButton: true)
+            self.updateCollectionView(showCollectionView: false, enableButton: true)
         }
     }
     
@@ -134,6 +157,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
             }
             self.uiCollectionView.isHidden = showCollectionView
             self.newCollectionButton.isEnabled = enableButton
+            self.uiCollectionView.reloadData()
         }
     }
     
@@ -160,8 +184,6 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     }
     
     func addPhotoToPhotoCollection(_ photoObject: [String: AnyObject]) {
-        print("addPhoto to Collection")
-        print(photoObject)
 //        performUIUpdatesOnMain {
 //            self.photoImageView.image = UIImage(data: imageData)
 //            self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
@@ -169,11 +191,11 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     }
     
     func savePhotoAsPhotoObject(_ photoObject: [String: AnyObject]) {
-        print("save photo as photo object")
         let photo = Photo(context: dataController.viewContext)
         photo.image = photoObject["imageData"] as? Data
         photo.creationDate = Date()
-        photo.newRelationship = pin
+        photo.pin = pin
+        print(photo)
         try? dataController.viewContext.save()
     }
     
@@ -200,6 +222,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let photo = fetchedResultsController.object(at: indexPath)
+        print(photo)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as! PhotoAlbumCollectionCellController
         
         // Set the image

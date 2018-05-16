@@ -156,6 +156,7 @@
                         <viewLayoutGuide key="safeArea" id="53C-RP-whP"/>
                     </view>
                     <connections>
+                        <outlet property="flowLayout" destination="Suu-jA-IJf" id="Nwb-ir-LBa"/>
                         <outlet property="mapView" destination="vU8-0x-Cbt" id="LH3-an-auO"/>
                         <outlet property="newCollectionButton" destination="sDU-ag-Pim" id="606-U7-8nN"/>
                         <outlet property="uiCollectionView" destination="obf-Qs-g20" id="52L-aC-yw5"/>
