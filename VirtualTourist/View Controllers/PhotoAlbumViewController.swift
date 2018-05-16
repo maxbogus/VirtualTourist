@@ -12,7 +12,7 @@ import MapKit
 import CoreData
 
 class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
-    
+
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet var photoCollectionView: UICollectionView!
     @IBOutlet var flowLayout: UICollectionViewFlowLayout!
@@ -235,4 +235,5 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         print(indexPath)
         
     }
+
 }

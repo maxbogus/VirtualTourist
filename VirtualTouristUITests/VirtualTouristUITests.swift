@@ -9,7 +9,7 @@
 import XCTest
 
 class VirtualTouristUITests: XCTestCase {
-        
+
     override func setUp() {
         super.setUp()
         
