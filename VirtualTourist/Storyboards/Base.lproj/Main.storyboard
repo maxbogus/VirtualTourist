@@ -96,15 +96,21 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cHA-Th-tvV">
                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                 </imageView>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="M59-k8-803">
+                                                    <rect key="frame" x="15" y="15" width="20" height="20"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                         </view>
                                         <constraints>
                                             <constraint firstItem="cHA-Th-tvV" firstAttribute="leading" secondItem="dOp-Qx-B6i" secondAttribute="leading" id="7OC-0H-egn"/>
                                             <constraint firstAttribute="bottom" secondItem="cHA-Th-tvV" secondAttribute="bottom" id="Ado-dY-myr"/>
                                             <constraint firstItem="cHA-Th-tvV" firstAttribute="top" secondItem="dOp-Qx-B6i" secondAttribute="top" id="Tu8-hT-i6f"/>
+                                            <constraint firstItem="M59-k8-803" firstAttribute="centerX" secondItem="dOp-Qx-B6i" secondAttribute="centerX" id="WiP-rM-ZkG"/>
                                             <constraint firstAttribute="trailing" secondItem="cHA-Th-tvV" secondAttribute="trailing" id="lrf-fK-aGu"/>
+                                            <constraint firstItem="M59-k8-803" firstAttribute="centerY" secondItem="dOp-Qx-B6i" secondAttribute="centerY" id="mPI-zp-wo8"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="activityIndicator" destination="M59-k8-803" id="fcm-rs-Cbo"/>
                                             <outlet property="photoAlbumImage" destination="cHA-Th-tvV" id="BTX-PT-ahd"/>
                                         </connections>
                                     </collectionViewCell>

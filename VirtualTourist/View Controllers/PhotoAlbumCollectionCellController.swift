@@ -9,6 +9,9 @@
 import UIKit
 
 class PhotoAlbumCollectionCellController: UICollectionViewCell {
+    var imageUrl: String = ""
+
     @IBOutlet weak var photoAlbumImage: UIImageView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
 }

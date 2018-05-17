@@ -199,6 +199,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         let photo = Photo(context: dataController.viewContext)
         photo.image = photoObject["imageData"] as? Data
         photo.creationDate = Date()
+        photo.imageUrl = photoObject["imageUrl"] as? String
         photo.pin = pin
         try? dataController.viewContext.save()
     }
