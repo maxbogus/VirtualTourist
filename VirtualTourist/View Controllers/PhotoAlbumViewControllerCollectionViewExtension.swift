@@ -31,9 +31,28 @@ extension PhotoAlbumViewController {
     private func setUpImage(using cell: PhotoAlbumCollectionCellController, photo: Photo, collectionView: UICollectionView, index: IndexPath) {
         if let imageData = photo.image {
             cell.activityIndicator.stopAnimating()
-            cell.photoAlbumImage?.image = UIImage(data: photo.image!)
+            cell.photoAlbumImage?.image = UIImage(data: imageData)
+        } else {
+            if let imageUrl = photo.imageUrl {
+                cell.activityIndicator.startAnimating()
+                if let photoDict = downloadPhoto(imageUrl) {
+                    let photoData = photoDict["imageData"] as! Data
+                    performUIUpdatesOnMain {
+                        if let currentCell = collectionView.cellForItem(at: index) as? PhotoAlbumCollectionCellController {
+                            if currentCell.imageUrl == imageUrl {
+                                currentCell.photoAlbumImage?.image = UIImage(data: photoData)
+                                cell.activityIndicator.stopAnimating()
+                            }
+                        }
+                        photo.image = photoData
+                        DispatchQueue.global(qos: .background).async {
+                            try? self.dataController.viewContext.save()
+                        }
+                    }
+                }
+            }
         }
-        
+
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

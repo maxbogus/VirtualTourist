@@ -192,6 +192,21 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         }
     }
 
+    func downloadPhoto(_ imageUrl: String) -> [String: AnyObject]? {
+        /* GUARD: Does our photo have a key for 'url_m'? */
+        
+        // if an image exists at the url, set the image and title
+        let imageURL = URL(string: imageUrl)
+        if let imageData = try? Data(contentsOf: imageURL!) {
+            return ["imageUrl": imageUrl as AnyObject,
+                    "imageData": imageData as AnyObject,
+                    "photoTitle": "" as AnyObject]
+        } else {
+            displayError("Image does not exist at \(String(describing: imageURL))")
+            return nil
+        }
+    }
+
     func savePhotoAsPhotoObject(_ photoObject: [String: AnyObject]) {
         let photo = Photo(context: dataController.viewContext)
         photo.image = photoObject["imageData"] as? Data
