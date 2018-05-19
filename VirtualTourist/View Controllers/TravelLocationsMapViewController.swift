@@ -102,12 +102,16 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
     }
     
     @objc func addWaypoint(longGesture: UIGestureRecognizer) {
-        let touchPoint = longGesture.location(in: mapView)
-        let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = newCoordinates
-        mapView.addAnnotation(annotation)
-        addAnnotation(coordinate: newCoordinates)
+
+        if longGesture.state == .began {
+            let touchPoint = longGesture.location(in: mapView)
+            let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = newCoordinates
+            mapView.addAnnotation(annotation)
+            addAnnotation(coordinate: newCoordinates)
+        }
+        
     }
     
     /// Adds a new notebook to the end of the `notebooks` array
