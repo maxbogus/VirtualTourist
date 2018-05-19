@@ -23,6 +23,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
     
     fileprivate func setUpGestureRecognition() {
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(addWaypoint(longGesture:)))
+        longGesture.minimumPressDuration = 1.0;
         mapView.addGestureRecognizer(longGesture)
     }
     
@@ -165,7 +166,6 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         // fetch Pin
         if let coordinate = view.annotation?.coordinate {
             let pin = findPin(coordinate: coordinate)
-            print(pin)
             photoAlbumViewController.pin = pin
             self.navigationController!.pushViewController(photoAlbumViewController, animated: true)
         }

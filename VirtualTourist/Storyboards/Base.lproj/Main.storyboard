@@ -64,6 +64,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Tnp-Ry-1Tk">
+                                <rect key="frame" x="177" y="323" width="20" height="20"/>
+                            </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="249" text="No Images" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UH9-HS-LVy">
                                 <rect key="frame" x="0.0" y="85" width="375" height="452"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -146,10 +149,12 @@
                         <constraints>
                             <constraint firstItem="8vv-3q-uM8" firstAttribute="trailing" secondItem="53C-RP-whP" secondAttribute="trailing" id="5cx-l2-wM2"/>
                             <constraint firstItem="53C-RP-whP" firstAttribute="trailing" secondItem="obf-Qs-g20" secondAttribute="trailing" id="7dB-in-oqx"/>
+                            <constraint firstItem="Tnp-Ry-1Tk" firstAttribute="centerX" secondItem="SEC-kg-uoU" secondAttribute="centerX" id="8Q6-9v-JAl"/>
                             <constraint firstItem="UH9-HS-LVy" firstAttribute="top" secondItem="53C-RP-whP" secondAttribute="top" constant="65" id="9S1-G5-Lg6"/>
                             <constraint firstItem="8vv-3q-uM8" firstAttribute="top" secondItem="obf-Qs-g20" secondAttribute="bottom" id="Bsa-gg-Yjr"/>
                             <constraint firstItem="UH9-HS-LVy" firstAttribute="trailing" secondItem="53C-RP-whP" secondAttribute="trailing" id="E4m-Nk-EPb"/>
                             <constraint firstItem="8vv-3q-uM8" firstAttribute="leading" secondItem="53C-RP-whP" secondAttribute="leading" id="F8X-7Z-X8Y"/>
+                            <constraint firstItem="Tnp-Ry-1Tk" firstAttribute="centerY" secondItem="SEC-kg-uoU" secondAttribute="centerY" id="FIm-6u-BjV"/>
                             <constraint firstItem="53C-RP-whP" firstAttribute="trailing" secondItem="vU8-0x-Cbt" secondAttribute="trailing" id="IhJ-iG-WJY"/>
                             <constraint firstItem="vU8-0x-Cbt" firstAttribute="top" secondItem="53C-RP-whP" secondAttribute="top" id="JMt-oq-fsg"/>
                             <constraint firstItem="8vv-3q-uM8" firstAttribute="bottom" secondItem="53C-RP-whP" secondAttribute="bottom" id="LbQ-g9-t2c"/>
@@ -162,6 +167,7 @@
                         <viewLayoutGuide key="safeArea" id="53C-RP-whP"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="Tnp-Ry-1Tk" id="X3G-fm-Ebk"/>
                         <outlet property="flowLayout" destination="Suu-jA-IJf" id="Nwb-ir-LBa"/>
                         <outlet property="mapView" destination="vU8-0x-Cbt" id="LH3-an-auO"/>
                         <outlet property="newCollectionButton" destination="sDU-ag-Pim" id="606-U7-8nN"/>

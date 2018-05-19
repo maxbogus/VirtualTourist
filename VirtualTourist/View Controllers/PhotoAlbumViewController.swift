@@ -17,7 +17,8 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     @IBOutlet var photoCollectionView: UICollectionView!
     @IBOutlet var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
-
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    
     @IBAction func returnBack(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -118,6 +119,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         let downloadQueue = DispatchQueue.global()
         
         // call dispatch async to send a closure to the downloads queue
+        activityIndicator.startAnimating()
         downloadQueue.async { () -> Void in
             FlickrClient.sharedInstance().searchByLatLon(latitude: self.pin.latitude, longitude: self.pin.longitude) { (success, photoArray, errorString) in
                 if success {
@@ -158,6 +160,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     
     func updateCollectionView(showCollectionView: Bool, enableButton: Bool, errorString: String? = nil) {
         performUIUpdatesOnMain {
+            self.activityIndicator.stopAnimating()
             if let error = errorString {
                 self.displayError(error)
             }
