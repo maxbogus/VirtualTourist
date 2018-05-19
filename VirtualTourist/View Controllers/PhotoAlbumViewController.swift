@@ -21,20 +21,46 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     @IBAction func returnBack(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
-    
+
     @IBAction func newCollectionButton(_ sender: Any) {
         fetchPhotos()
     }
-    
+
     var regionHasBeenCentered = false
     var dataController: DataController!
-//    var annotation: MKPointAnnotation!
     var insertedIndexPaths: [IndexPath]!
     var deletedIndexPaths: [IndexPath]!
     var updatedIndexPaths: [IndexPath]!
     var pin: Pin!
     var fetchedResultsController:NSFetchedResultsController<Photo>!
     let locationManager = CLLocationManager()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        updateFlowLayout(view.frame.size)
+        setUpMapView()
+        setUpAutomaticCenterOnUserLocation()
+        setUpFetchedResultsController()
+        photoCollectionView.delegate = self
+        photoCollectionView.dataSource = self
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        updateFlowLayout(size)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let photos = pin.photos, photos.count == 0 {
+            fetchPhotos()
+        }
+        photoCollectionView?.reloadData()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        fetchedResultsController = nil
+    }
     
     fileprivate func setUpAutomaticCenterOnUserLocation() {
         locationManager.delegate = self
@@ -85,32 +111,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         flowLayout?.itemSize = CGSize(width: dimension, height: dimension)
         flowLayout?.sectionInset = UIEdgeInsets(top: space, left: space, bottom: space, right: space)
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        updateFlowLayout(view.frame.size)
-        setUpMapView()
-        setUpAutomaticCenterOnUserLocation()
-        setUpFetchedResultsController()
-        photoCollectionView.delegate = self
-        photoCollectionView.dataSource = self
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        updateFlowLayout(size)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        fetchPhotos()
-        photoCollectionView?.reloadData()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        fetchedResultsController = nil
-    }
-    
+
     func fetchPhotos() {
         newCollectionButton.isEnabled = false
         let downloadQueue = DispatchQueue.global()
