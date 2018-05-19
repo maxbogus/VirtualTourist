@@ -41,8 +41,6 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         setUpMapView()
         setUpAutomaticCenterOnUserLocation()
         setUpFetchedResultsController()
-        photoCollectionView.delegate = self
-        photoCollectionView.dataSource = self
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -51,7 +49,10 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        photoCollectionView.delegate = self
+        photoCollectionView.dataSource = self
         if let photos = pin.photos, photos.count == 0 {
+            print("has photos")
             fetchPhotos()
         }
         photoCollectionView?.reloadData()
@@ -149,7 +150,6 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
             for photo in photoArray {
                 if let photoObject: [String: AnyObject] = downloadPhoto(photo) {
                     savePhotoAsPhotoObject(photoObject)
-                    addPhotoToPhotoCollection(photoObject)
                 }
             }
             self.updateCollectionView(showCollectionView: false, enableButton: true)
@@ -188,14 +188,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
             return nil
         }
     }
-    
-    func addPhotoToPhotoCollection(_ photoObject: [String: AnyObject]) {
-//        performUIUpdatesOnMain {
-//            self.photoImageView.image = UIImage(data: imageData)
-//            self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
-//        }
-    }
-    
+
     func savePhotoAsPhotoObject(_ photoObject: [String: AnyObject]) {
         let photo = Photo(context: dataController.viewContext)
         photo.image = photoObject["imageData"] as? Data
