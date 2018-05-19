@@ -73,11 +73,6 @@ extension PhotoAlbumViewController {
         if collectionView.cellForItem(at: forItemAt) == nil {
             return
         }
-        //
-        //        let photo = fetchedResultsController.object(at: forItemAt)
-        //        if let imageUrl = photo.imageUrl {
-        //            Client.shared().cancelDownload(imageUrl)
-        //        }
 
     }
     
