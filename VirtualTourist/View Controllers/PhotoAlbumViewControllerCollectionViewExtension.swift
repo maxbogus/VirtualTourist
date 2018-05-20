@@ -11,7 +11,7 @@ import UIKit
 import CoreData
 
 extension PhotoAlbumViewController {
-    
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return fetchedResultsController.sections?.count ?? 1
     }

@@ -9,7 +9,7 @@
 import CoreData
 
 extension PhotoAlbumViewController: NSFetchedResultsControllerDelegate {
-    
+
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         insertedIndexPaths = [IndexPath]()
         deletedIndexPaths = [IndexPath]()
@@ -23,7 +23,7 @@ extension PhotoAlbumViewController: NSFetchedResultsControllerDelegate {
         for type: NSFetchedResultsChangeType,
         newIndexPath: IndexPath?) {
         
-        switch (type) {
+        switch type {
         case .insert:
             insertedIndexPaths.append(newIndexPath!)
             break

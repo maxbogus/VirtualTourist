@@ -18,7 +18,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     @IBOutlet var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
-    
+
     @IBAction func returnBack(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
