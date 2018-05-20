@@ -18,49 +18,49 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
     var dataController: DataController!
     var fetchedResultsController:NSFetchedResultsController<Pin>!
     let locationManager = CLLocationManager()
-    
+
     private let reuseIdentifier = "MyIdentifier"
-    
+
     fileprivate func setUpGestureRecognition() {
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(addWaypoint(longGesture:)))
-        longGesture.minimumPressDuration = 1.0;
+        longGesture.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(longGesture)
     }
-    
+
     fileprivate func setUpAutomaticCenterOnUserLocation() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
     }
-    
+
     fileprivate func setUpFetchedResultsController() {
         let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "pins")
-        
+
         do {
             try fetchedResultsController.performFetch()
         } catch {
             fatalError("The fetch couldn't be performed \(error.localizedDescription)")
         }
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         if let pins = loadAnnotations() {
             showPins(pins: pins)
         }
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         fetchedResultsController = nil
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
@@ -68,7 +68,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         setUpFetchedResultsController()
         setUpAutomaticCenterOnUserLocation()
     }
-    
+
     func loadAnnotations() -> [Pin]? {
         if let controller = fetchedResultsController {
             if let objects = controller.fetchedObjects {
@@ -77,7 +77,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         }
         return nil
     }
-    
+
     func showPins(pins: [Pin]) {
         for pin in pins {
             let annotation = MKPointAnnotation()
@@ -86,7 +86,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
             mapView.addAnnotation(annotation)
         }
     }
-    
+
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations[0]
         
@@ -100,7 +100,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         }
 
     }
-    
+
     @objc func addWaypoint(longGesture: UIGestureRecognizer) {
 
         if longGesture.state == .began {
@@ -113,7 +113,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         }
         
     }
-    
+
     /// Adds a new notebook to the end of the `notebooks` array
     func addAnnotation(coordinate: CLLocationCoordinate2D) {
         let pin = Pin(context: dataController.viewContext)
@@ -138,7 +138,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
 
         return annotationView
     }
-    
+
     private func findPin(coordinate: CLLocationCoordinate2D) -> Pin? {
         let predicate = NSPredicate(format: "latitude == %lf AND longitude == %lf", coordinate.latitude, coordinate.longitude)
         var pin: Pin?
@@ -149,7 +149,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         }
         return pin
     }
-    
+
     private func fetchPin(_ predicate: NSPredicate, sorting: NSSortDescriptor? = nil) throws -> Pin? {
         let fr: NSFetchRequest<Pin> = Pin.fetchRequest()
         fr.predicate = predicate
@@ -162,7 +162,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
         }
         return pin
     }
-    
+
     // perform action on click on annotation
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let photoAlbumViewController = self.storyboard!.instantiateViewController(withIdentifier: "PhotoAlbumViewControllerID") as! PhotoAlbumViewController
@@ -174,4 +174,5 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
             self.navigationController!.pushViewController(photoAlbumViewController, animated: true)
         }
     }
+
 }
