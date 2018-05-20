@@ -23,7 +23,7 @@ class TravelLocationsMapViewController: UIViewController, MKMapViewDelegate, CLL
 
     fileprivate func setUpGestureRecognition() {
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(addWaypoint(longGesture:)))
-        longGesture.minimumPressDuration = 1.0
+        longGesture.minimumPressDuration = 0.5
         mapView.addGestureRecognizer(longGesture)
     }
 
