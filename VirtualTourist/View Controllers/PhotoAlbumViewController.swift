@@ -79,6 +79,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         fetchRequest.predicate = predicate
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: "photos")
+        fetchedResultsController.delegate = self
         
         do {
             try fetchedResultsController.performFetch()
