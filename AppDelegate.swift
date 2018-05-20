@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         dataController.load()
-        
+
         let navigationController = window?.rootViewController as! UINavigationController
         let travelLocationsViewController = navigationController.topViewController as! TravelLocationsMapViewController
         travelLocationsViewController.dataController = dataController

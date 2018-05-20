@@ -15,7 +15,7 @@ class DataController {
     var viewContext: NSManagedObjectContext {
         return persistantContainer.viewContext
     }
-    
+
     var backgroundContext: NSManagedObjectContext!
     
     init(modelName:String) {
@@ -62,4 +62,5 @@ extension DataController {
             self.autoSaveViewContext(interval: interval)
         }
     }
+
 }
