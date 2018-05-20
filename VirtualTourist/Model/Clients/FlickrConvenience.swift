@@ -14,7 +14,7 @@ import Foundation
 extension FlickrClient {
     
     // MARK: Search photos by coordinates (GET) Methods
-    func searchByLatLon(latitude: Double, longitude: Double, completionHandlerForSession: @escaping (_ success: Bool, _ photosArray: [[String: AnyObject]]?, _ errorString: String?) -> Void) {
+    func searchByLatLon(latitude: Double, longitude: Double, pageNumber: Int, completionHandlerForSession: @escaping (_ success: Bool, _ photosArray: [[String: AnyObject]]?, _ totalPages: Int?, _ errorString: String?) -> Void) {
         let methodParameters = [
             FlickrParameterKeys.Method: FlickrParameterValues.SearchMethod,
             FlickrParameterKeys.APIKey: FlickrParameterValues.APIKey,
@@ -23,24 +23,26 @@ extension FlickrClient {
             FlickrParameterKeys.Extras: FlickrParameterValues.MediumURL,
             FlickrParameterKeys.Format: FlickrParameterValues.ResponseFormat,
             FlickrParameterKeys.NoJSONCallback: FlickrParameterValues.DisableJSONCallback,
+            FlickrParameterKeys.Page: "\(pageNumber)",
             FlickrParameterKeys.PerPage: FlickrParameterValues.PerPageValue
         ]
         let _ = taskForGETMethod(parameters: methodParameters as [String : AnyObject]) { (results, error) in
             
             /* 3. Send the desired value(s) to completion handler */
             if error != nil {
-                completionHandlerForSession(false, nil, "Search failed.")
+                completionHandlerForSession(false, nil, nil, "Search failed.")
             } else {
+                print(results)
                 if let photosDictionary = results?[FlickrResponseKeys.Photos] as? NSDictionary {
-                    if let photosArray = photosDictionary[FlickrResponseKeys.Photo] as? [[String: AnyObject]] {
-                        completionHandlerForSession(true, photosArray, nil)
+                    if let photosArray = photosDictionary[FlickrResponseKeys.Photo] as? [[String: AnyObject]], let totalPages = photosDictionary[FlickrResponseKeys.Pages] as? Int {
+                        completionHandlerForSession(true, photosArray, totalPages, nil)
                     } else {
                         print("Could not find \(FlickrResponseKeys.Photo) in \(results!)")
-                        completionHandlerForSession(false, nil, "Get photo array failed.")
+                        completionHandlerForSession(false, nil, nil, "Get photo array failed.")
                     }
                 } else {
                     print("Could not find \(FlickrResponseKeys.Photos) in \(results!)")
-                    completionHandlerForSession(false, nil, "Get photos dictionary failed.")
+                    completionHandlerForSession(false, nil, nil, "Get photos dictionary failed.")
                 }
             }
         }

@@ -24,6 +24,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     }
 
     @IBAction func newCollectionButton(_ sender: Any) {
+        pageNumber = Int(arc4random_uniform(UInt32(totalPageNumber)))
         fetchPhotos()
     }
 
@@ -33,6 +34,8 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     var deletedIndexPaths: [IndexPath]!
     var updatedIndexPaths: [IndexPath]!
     var pin: Pin!
+    var pageNumber: Int = 0
+    var totalPageNumber: Int!
     var fetchedResultsController:NSFetchedResultsController<Photo>!
     let locationManager = CLLocationManager()
 
@@ -122,10 +125,11 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         // call dispatch async to send a closure to the downloads queue
         activityIndicator.startAnimating()
         downloadQueue.async { () -> Void in
-            FlickrClient.sharedInstance().searchByLatLon(latitude: self.pin.latitude, longitude: self.pin.longitude) { (success, photoArray, errorString) in
+            FlickrClient.sharedInstance().searchByLatLon(latitude: self.pin.latitude, longitude: self.pin.longitude, pageNumber: self.pageNumber) { (success, photoArray, totalPages, errorString) in
                 if success {
-                    if let photoArray = photoArray {
-                        self.fillPhotoCollection(photoArray)
+                    if let photoArray = photoArray, let totalPages = totalPages {
+                        self.totalPageNumber = totalPages
+                        self.fillPhotoCollection(photoArray, totalPages)
                     }
                 } else {
                     self.updateCollectionView(showCollectionView: true, enableButton: true, errorString: errorString)
@@ -144,12 +148,14 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         self.present(alert, animated: true, completion: nil)
     }
     
-    func fillPhotoCollection(_ photoArray: [[String: AnyObject]]) {
+    func fillPhotoCollection(_ photoArray: [[String: AnyObject]], _ totalPages: Int) {
         if photoArray.count == 0 {
             self.updateCollectionView(showCollectionView: true, enableButton: true, errorString: "No Photos Found. Search Again.")
             return
         } else {
             // select first 20 photos
+            print(photoArray)
+            print(totalPages)
             for photo in photoArray {
                 if let photoObject: [String: AnyObject] = downloadPhoto(photo) {
                     savePhotoAsPhotoObject(photoObject)
