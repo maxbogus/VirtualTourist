@@ -21,7 +21,7 @@ extension FlickrClient {
         static let SearchLatRange = (-90.0, 90.0)
         static let SearchLonRange = (-180.0, 180.0)
     }
-    
+
     // MARK: Flickr Parameter Keys
     struct FlickrParameterKeys {
         static let Method = "method"
@@ -36,7 +36,7 @@ extension FlickrClient {
         static let Page = "page"
         static let PerPage = "per_page"
     }
-    
+
     // MARK: Flickr Parameter Values
     struct FlickrParameterValues {
         static let SearchMethod = "flickr.photos.search"
@@ -49,7 +49,7 @@ extension FlickrClient {
         static let UseSafeSearch = "1"
         static let PerPageValue = "20"
     }
-    
+
     // MARK: Flickr Response Keys
     struct FlickrResponseKeys {
         static let Status = "stat"
@@ -60,20 +60,10 @@ extension FlickrClient {
         static let Pages = "pages"
         static let Total = "total"
     }
-    
+
     // MARK: Flickr Response Values
     struct FlickrResponseValues {
         static let OKStatus = "ok"
     }
-    
-    // FIX: As of Swift 2.2, using strings for selectors has been deprecated. Instead, #selector(methodName) should be used.
-    /*
-     // MARK: Selectors
-     struct Selectors {
-     static let KeyboardWillShow: Selector = "keyboardWillShow:"
-     static let KeyboardWillHide: Selector = "keyboardWillHide:"
-     static let KeyboardDidShow: Selector = "keyboardDidShow:"
-     static let KeyboardDidHide: Selector = "keyboardDidHide:"
-     }
-     */
+
 }
