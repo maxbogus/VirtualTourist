@@ -24,7 +24,12 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
     }
 
     @IBAction func newCollectionButton(_ sender: Any) {
-        pageNumber = Int(arc4random_uniform(UInt32(totalPageNumber)))
+        for photos in fetchedResultsController.fetchedObjects! {
+            dataController.viewContext.delete(photos)
+        }
+        try? dataController.viewContext.save()
+
+        pageNumber = Int(arc4random_uniform(UInt32(totalPageNumber ?? 0)))
         fetchPhotos()
     }
 
@@ -56,7 +61,6 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         photoCollectionView.delegate = self
         photoCollectionView.dataSource = self
         if let photos = pin.photos, photos.count == 0 {
-            print("has photos")
             fetchPhotos()
         }
         photoCollectionView?.reloadData()
@@ -154,10 +158,9 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
             return
         } else {
             // select first 20 photos
-            print(photoArray)
-            print(totalPages)
             for photo in photoArray {
-                if let photoObject: [String: AnyObject] = downloadPhoto(photo) {
+                print(photo)
+                if let photoObject: [String: AnyObject] = downloadPhoto(photo) as! [String : AnyObject] {
                     savePhotoAsPhotoObject(photoObject)
                 }
             }
@@ -177,7 +180,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         }
     }
     
-    func downloadPhoto(_ photo: [String: AnyObject]) -> [String: AnyObject]? {
+    func downloadPhoto(_ photo: [String: AnyObject]) -> [String: AnyObject?]? {
         let photoDictionary = photo as [String: AnyObject]
         let photoTitle = photoDictionary[FlickrClient.FlickrResponseKeys.Title] as? String
         
@@ -189,14 +192,9 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
         
         // if an image exists at the url, set the image and title
         let imageURL = URL(string: imageUrlString)
-        if let imageData = try? Data(contentsOf: imageURL!) {
-            return ["imageUrl": imageUrlString as AnyObject,
-                    "imageData": imageData as AnyObject,
-                    "photoTitle": photoTitle as AnyObject]
-        } else {
-            displayError("Image does not exist at \(String(describing: imageURL))")
-            return nil
-        }
+        return ["imageUrl": imageUrlString as AnyObject,
+                "imageData": nil,
+                "photoTitle": photoTitle as AnyObject]
     }
 
     func downloadPhoto(_ imageUrl: String) -> [String: AnyObject]? {
@@ -216,7 +214,7 @@ class PhotoAlbumViewController: UIViewController, CLLocationManagerDelegate, MKM
 
     func savePhotoAsPhotoObject(_ photoObject: [String: AnyObject]) {
         let photo = Photo(context: dataController.viewContext)
-        photo.image = photoObject["imageData"] as? Data
+//        photo.image = photoObject["imageData"] as? Data
         photo.creationDate = Date()
         photo.imageUrl = photoObject["imageUrl"] as? String
         photo.pin = pin

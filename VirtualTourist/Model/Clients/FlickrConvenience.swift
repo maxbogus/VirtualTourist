@@ -32,7 +32,6 @@ extension FlickrClient {
             if error != nil {
                 completionHandlerForSession(false, nil, nil, "Search failed.")
             } else {
-                print(results)
                 if let photosDictionary = results?[FlickrResponseKeys.Photos] as? NSDictionary {
                     if let photosArray = photosDictionary[FlickrResponseKeys.Photo] as? [[String: AnyObject]], let totalPages = photosDictionary[FlickrResponseKeys.Pages] as? Int {
                         completionHandlerForSession(true, photosArray, totalPages, nil)
