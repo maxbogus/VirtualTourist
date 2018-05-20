@@ -26,10 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationController = window?.rootViewController as! UINavigationController
         let travelLocationsViewController = navigationController.topViewController as! TravelLocationsMapViewController
         travelLocationsViewController.dataController = dataController
-        
+
         locationManager = CLLocationManager()
         locationManager?.requestWhenInUseAuthorization()
-        
+
         return true
     }
 
@@ -55,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         saveViewContext()
     }
-    
+
     func saveViewContext() {
         try? dataController.viewContext.save()
     }
