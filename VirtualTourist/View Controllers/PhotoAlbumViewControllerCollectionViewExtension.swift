@@ -24,6 +24,10 @@ extension PhotoAlbumViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as! PhotoAlbumCollectionCellController
         cell.photoAlbumImage?.image = nil
         cell.activityIndicator.startAnimating()
+        
+        let photo = fetchedResultsController.object(at: indexPath)
+        
+        setUpImage(using: cell, photo: photo, collectionView: collectionView, index: indexPath)
 
         return cell
     }
@@ -32,18 +36,15 @@ extension PhotoAlbumViewController {
         if let imageData = photo.image {
             cell.activityIndicator.stopAnimating()
             cell.photoAlbumImage?.image = UIImage(data: imageData)
-        } else {
+        }
+        else {
             if let imageUrl = photo.imageUrl {
                 cell.activityIndicator.startAnimating()
                 if let photoDict = downloadPhoto(imageUrl) {
                     let photoData = photoDict["imageData"] as! Data
                     performUIUpdatesOnMain {
-                        if let currentCell = collectionView.cellForItem(at: index) as? PhotoAlbumCollectionCellController {
-                            if currentCell.imageUrl == imageUrl {
-                                currentCell.photoAlbumImage?.image = UIImage(data: photoData)
-                                cell.activityIndicator.stopAnimating()
-                            }
-                        }
+                        cell.photoAlbumImage?.image = UIImage(data: photoData)
+                        cell.activityIndicator.stopAnimating()
                         photo.image = photoData
                         DispatchQueue.global(qos: .background).async {
                             try? self.dataController.viewContext.save()
@@ -53,13 +54,6 @@ extension PhotoAlbumViewController {
             }
         }
 
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let photo = fetchedResultsController.object(at: indexPath)
-        let photoViewCell = cell as! PhotoAlbumCollectionCellController
-        
-        setUpImage(using: photoViewCell, photo: photo, collectionView: collectionView, index: indexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
